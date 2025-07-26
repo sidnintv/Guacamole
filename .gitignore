@@ -1,0 +1,51 @@
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+.Spotlight-V100
+.Trashes
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Node/npm (если появятся утилиты)
+node_modules/
+npm-debug.log*
+
+# Python (если используются утилиты)
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Build & dist
+dist/
+build/
+
+# Docker artifacts
+*.pid
+*.sock
+
+# Backups and archives
+*.tar
+*.tar.gz
+*.tgz
+*.zip
+*.gz
+*.bak
+*.old
+*.sql
+*.sql.gz
+
+# OS cache
+ehthumbs.db
+Thumbs.db

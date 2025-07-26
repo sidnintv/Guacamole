@@ -1,0 +1,67 @@
+services:
+  postgres:
+    image: postgres:15.2-alpine
+    container_name: guac-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+      - ./initdb:/docker-entrypoint-initdb.d
+    networks:
+      - guacnet
+
+  guacd:
+    image: guacamole/guacd:1.6.0
+    container_name: guacd
+    restart: unless-stopped
+    networks:
+      - guacnet
+
+  guacamole:
+    image: guacamole/guacamole:1.6.0
+    container_name: guacamole
+    restart: unless-stopped
+    environment:
+      GUACD_HOSTNAME: guacd
+      POSTGRESQL_DATABASE: ${POSTGRES_DB}
+      POSTGRESQL_HOSTNAME: postgres
+      POSTGRESQL_USERNAME: ${POSTGRES_USER}
+      POSTGRESQL_PASSWORD: ${POSTGRES_PASSWORD}
+      RECORDING_SEARCH_PATH: /record
+    depends_on:
+      - guacd
+      - postgres
+    networks:
+      - guacnet
+
+  nginx:
+    image: nginx:1.27
+    container_name: guac-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/certs:/etc/letsencrypt
+      - ./nginx/logs:/var/log/nginx
+    depends_on:
+      - guacamole
+    networks:
+      - guacnet
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: guac-certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    volumes:
+      - ./nginx/certs:/etc/letsencrypt
+    networks:
+      - guacnet
+
+networks:
+  guacnet:
+    driver: bridge
