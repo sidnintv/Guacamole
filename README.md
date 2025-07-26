@@ -39,7 +39,7 @@ Build and start the containers:
 
 Access Guacamole via your browser:
 
-https://<your-domain>
+https://your-domain
 
 Default login credentials:
 
