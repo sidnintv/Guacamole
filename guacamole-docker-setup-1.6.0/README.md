@@ -20,6 +20,7 @@ Deployment Steps
 Extract the archive and navigate to the project directory:
 
 tar -xzf guacamole-docker-setup-1.6.0.tar.gz
+
 cd guacamole-docker-setup-1.6.0
 
 Configure environment variables:
@@ -31,29 +32,39 @@ PostgreSQL database user, password, and name
 Example:
 
 nano .env
+
 Build and start the containers:
 
 ./setup-and-run.sh
+
 Access Guacamole via your browser:
 
 https://<your-domain>
+
 Default login credentials:
 
 Username: guacadmin
+
 Password: guacadmin
+
 (Be sure to change the default password immediately after logging in.)
 
 Maintenance and Backup
+
 Manual PostgreSQL Backup to S3
+
 Run the provided script to dump the Guacamole database and upload it to your S3-compatible storage (e.g., AWS or MinIO):
 
 ./backup-postgres-s3.sh
+
 Update Images and Restart Services
+
 To pull the latest Docker images and restart Guacamole:
 
 ./update-guacamole.sh
 
 Additional Notes
+
 SSL Certificates are automatically renewed by Certbot every 12 hours.
 Nginx Configuration handles both API calls and WebSocket connections (/guacamole/ and /guacamole/websocket-tunnel).
 The system uses PostgreSQL for all authentication and configuration, allowing easy migration and backups.
